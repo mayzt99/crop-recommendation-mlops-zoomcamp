@@ -29,7 +29,7 @@ class TestUtils:
     @pytest.fixture
     def sample_data(self):
         """Load data for testing"""
-        data = pd.read_csv("../data/Crop_recommendation.csv")
+        data = pd.read_csv("data/Crop_recommendation.csv")
         return data
 
     def test_validate_data_columns(self, sample_data):
