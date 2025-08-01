@@ -132,6 +132,10 @@ black .
 pylint *.py tests/
 ```
 
+## 📈 Model Performance
+The Random Forest model achieves an accuracy of approximately 95% on the crop recommendation dataset.
+
+
 ## 📊 Model Features
 
 The model uses the following features to predict optimal crops:
@@ -194,50 +198,10 @@ The model can recommend the following crops:
 - Model performance tracking
 - Data drift detection with Evidently
 
+### 5. CI/CD Pipeline
+- Automated testing with GitHub Actions
+- Continuous integration and deployment
 
-## 🛠️ Development
-
-### Environment Setup
-```bash
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# or
-venv\Scripts\activate     # Windows
-
-# Install dependencies
-pip install -r crop_prediction/requirements.txt
-```
-
-### Adding New Features
-1. Create feature branch
-2. Implement changes
-3. Submit pull request
-
-## 📈 Experiment Tracking
-
-All experiments are tracked in MLflow:
-- **Metrics**: Accuracy, Precision, Recall
-- **Parameters**: Model hyperparameters
-- **Artifacts**: Trained models, preprocessors
-
-Access MLflow UI at: http://localhost:5000
-
-## Workflow Orchastration
-
-Access Prefect Dashboard at: http://127.0.0.1:4200
-
-## 🐳 Docker Commands
-
-```bash
-# Build image
-docker build -t crop-recommendation-service:v1 crop_prediction/
-
-# Run container
-docker run -p 9696:9696 crop-recommendation-service:v1
-
-# Run with monitoring stack
-docker compose up --build
 ```
 
 ## 📝 API Documentation
