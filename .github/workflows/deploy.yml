@@ -38,7 +38,7 @@ jobs:
         MLFLOW_TRACKING_URI: http://127.0.0.1:5000
     
     - name: Build Docker image
-      run: docker build -t crop-recommendation-service:v1 .
+      run: docker build -t crop-recommendation-service:v1 crop_prediction/
     
     # - name: Login to Docker Hub
     #   uses: docker/login-action@v2
