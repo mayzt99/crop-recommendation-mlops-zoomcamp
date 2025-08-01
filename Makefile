@@ -2,7 +2,7 @@
 
 # Install dependencies
 install:
-	pip install -r requirements.txt
+	pip install -r crop_prediction/requirements.txt
 
 # Run tests
 test:
@@ -26,15 +26,15 @@ clean:
 
 # Train model
 train:
-	python train.py
+	python training_pipeline/prefect_training_pipeline.py
 
 # Run prediction service
 predict:
-	python predict.py
+	python crop_prediction/predict.py
 
 # Build Docker image
 docker-build:
-	docker build -t crop-recommendation-service:v1 .
+	docker build -t crop-recommendation-service:v1 crop_prediction/
 
 # Run Docker container
 docker-run:

@@ -2,38 +2,43 @@
 
 A machine learning project that recommends optimal crops based on soil and environmental conditions using MLOps best practices.
 
-## 🌾 Project Overview
+## Project Overview
 
 This project implements an end-to-end MLOps pipeline for crop recommendation using:
 - **Random Forest Classifier** for crop prediction
 - **MLflow** for experiment tracking and model registry
 - **Prefect** for workflow orchestration
 - **Docker** for containerization
-- **Grafana & PostgreSQL** for monitoring
+- **Evidently AI** for monitoring
+- **Github Actions** for CI/CD
 
 ## 📁 Project Structure
 
 ```
 mlops-zoomcamp-project/
+├── .github/
+│   └── workflows/
+│       ├── test.yml
+│       └── deploy.yml
+├── crop_monitoring
+│   ├──monitoring_report.html
+│   └──monitoring.py
 ├── data/
 │   └── Crop_recommendation.csv
 ├── models/
 │   ├── dv.pkl
 │   └── random_forest_model.pkl
 ├── tests/
-│   └── integration_test.py
-├── config/
-│   ├── grafana_datasources.yaml
-│   └── grafana_dashboards.yaml
-├── dashboards/
-│   └── crop_monitoring.json
-├── train.py
-├── predict.py
-├── prefect_flow.py
-├── docker-compose.yml
-├── Dockerfile
-├── requirements.txt
-├── Makefile
+│   ├── integration_test.py
+│   └── unit_test.py
+├── crop_prediction/
+│   ├── predict.py
+│   ├── Dockerfile
+│   ├── test.py
+│   └── requirements.txt
+├── training_pipeline/
+│   ├── prefect_training_pipeline.py
+│   └── train.ipynb
 └── README.md
 ```
 
@@ -48,45 +53,43 @@ mlops-zoomcamp-project/
 
 1. **Clone the repository:**
 ```bash
-git clone <repository-url>
+git clone https://github.com/mayzt99/crop-recommendation-mlops-zoomcamp.git
 cd mlops-zoomcamp-project
 ```
-
-2. **Install dependencies:**
+2. **Create Virtual Environment**
 ```bash
-make install
-# or
-pip install -r requirements.txt
+python -m venv venv
 ```
 
-3. **Start MLflow server:**
+3. **Install dependencies:**
 ```bash
-mlflow server --host 0.0.0.0 --port 5000
+pip install -r crop_prediction/requirements.txt
+```
+
+4. **Start MLflow server:**
+```bash
+mlflow server --host 127.0.0.1 --port 5000
+```
+
+5. **Start Prefect server:**
+```bash
+prefect orion start
 ```
 
 ## 🔧 Usage
 
 ### Training the Model
 
-**Option 1: Direct training**
+**Train the Model with MLflow and Prefect**
 ```bash
-make train
-# or
-python train.py
-```
-
-**Option 2: Using Prefect flow**
-```bash
-python prefect_flow.py
+python training_pipeline/prefect_training_pipeline.py
 ```
 
 ### Running Predictions
 
 1. **Start the prediction service:**
 ```bash
-make predict
-# or
-python predict.py
+uvicorn predict:app --host 0.0.0.0 --port 9696
 ```
 
 2. **Make predictions:**
@@ -94,52 +97,39 @@ python predict.py
 curl -X POST http://localhost:9696/predict \
   -H "Content-Type: application/json" \
   -d '[{"N": 90, "P": 42, "K": 43, "temperature": 20.8, "humidity": 82.0, "ph": 6.5, "rainfall": 202.9}]'
+OR
+python crop_prediction/predict.py
 ```
 
 ### Docker Deployment
 
 1. **Build Docker image:**
 ```bash
-make docker-build
+docker build -t crop-recommendation-service:v1 crop_prediction/
 ```
 
 2. **Run container:**
 ```bash
-make docker-run
+docker run -p 9696:9696 crop-recommendation-service:v1
 ```
-
-### Monitoring with Grafana
-
-1. **Start monitoring stack:**
-```bash
-docker compose up -d
-```
-
-2. **Access services:**
-- Grafana: http://localhost:3000
-- Adminer: http://localhost:8080
-- PostgreSQL: localhost:5432
 
 ## 🧪 Testing & Quality
 
 ### Run Tests
 ```bash
-make test
+cd tests
+pytest unit_test.py -v
+pytest integration_test.py -v
 ```
 
 ### Code Formatting
 ```bash
-make format
+black .
 ```
 
 ### Linting
 ```bash
-make lint
-```
-
-### All Quality Checks
-```bash
-make quality
+pylint *.py tests/
 ```
 
 ## 📊 Model Features
@@ -203,7 +193,7 @@ The model can recommend the following crops:
 ### 4. Monitoring Pipeline
 - Model performance tracking
 - Data drift detection with Evidently
-- Grafana dashboards for visualization
+
 
 ## 🛠️ Development
 
@@ -216,14 +206,13 @@ source venv/bin/activate  # Linux/Mac
 venv\Scripts\activate     # Windows
 
 # Install dependencies
-make install
+pip install -r crop_prediction/requirements.txt
 ```
 
 ### Adding New Features
 1. Create feature branch
 2. Implement changes
-3. Run quality checks: `make quality`
-4. Submit pull request
+3. Submit pull request
 
 ## 📈 Experiment Tracking
 
@@ -234,11 +223,15 @@ All experiments are tracked in MLflow:
 
 Access MLflow UI at: http://localhost:5000
 
+## Workflow Orchastration
+
+Access Prefect Dashboard at: http://127.0.0.1:4200
+
 ## 🐳 Docker Commands
 
 ```bash
 # Build image
-docker build -t crop-recommendation-service:v1 .
+docker build -t crop-recommendation-service:v1 crop_prediction/
 
 # Run container
 docker run -p 9696:9696 crop-recommendation-service:v1
@@ -273,39 +266,3 @@ docker compose up --build
 }
 ```
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create feature branch: `git checkout -b feature-name`
-3. Commit changes: `git commit -am 'Add feature'`
-4. Push to branch: `git push origin feature-name`
-5. Submit pull request
-
-## 🆘 Troubleshooting
-
-### Common Issues
-
-**MLflow server not running:**
-```bash
-mlflow server --host 0.0.0.0 --port 5000
-```
-
-**Port already in use:**
-```bash
-# Kill process using port 9696
-netstat -ano | findstr :9696
-taskkill /PID <PID> /F
-```
-
-**Docker build fails:**
-```bash
-# Clean Docker cache
-docker system prune -a
-```
-
-## 📞 Support
-
-For issues and questions:
-- Create an issue in the repository
-- Check existing documentation
-- Review troubleshooting section
