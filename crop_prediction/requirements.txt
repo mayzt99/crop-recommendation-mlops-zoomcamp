@@ -12,3 +12,4 @@ gunicorn==21.2.0
 pytest
 black
 pylint
+werkzeug==2.3.8
