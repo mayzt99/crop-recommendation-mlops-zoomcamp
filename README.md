@@ -1,6 +1,33 @@
 # Crop Recommendation MLOps Project
 
-A machine learning project that recommends optimal crops based on soil and environmental conditions using MLOps best practices.
+## Problem Description
+
+### Business Problem
+Farmers worldwide face the critical challenge of selecting the most suitable crops for their specific soil and environmental conditions. Poor crop selection leads to:
+- Reduced agricultural productivity and yield
+- Economic losses for farmers
+- Inefficient use of natural resources
+- Food security concerns
+
+### Technical Problem
+Traditional crop selection relies on:
+- Manual expertise and experience
+- Limited data-driven insights
+- Inconsistent decision-making processes
+- Lack of scalable solutions
+
+### Solution Approach
+This project develops an intelligent crop recommendation system that:
+- Analyzes soil composition (N, P, K levels)
+- Considers environmental factors (temperature, humidity, pH, rainfall)
+- Provides data-driven crop recommendations
+- Implements MLOps practices for production deployment
+
+### Target Users
+- **Farmers**: Get personalized crop recommendations
+- **Agricultural consultants**: Support decision-making with data
+- **Government agencies**: Policy planning and resource allocation
+- **AgTech companies**: Integrate ML capabilities into existing platforms
 
 ## Project Overview
 
